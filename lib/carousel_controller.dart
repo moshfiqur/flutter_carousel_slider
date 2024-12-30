@@ -54,7 +54,7 @@ class CarouselSliderControllerImpl implements CarouselSliderController {
   Future<void> nextPage(
       {Duration? duration = const Duration(milliseconds: 300),
       Curve? curve = Curves.linear}) async {
-    final bool isNeedResetTimer = _state!.options.pauseAutoPlayOnManualNavigate;
+    final bool isNeedResetTimer = _state != null && _state!.options != null && _state!.options.pauseAutoPlayOnManualNavigate;
     if (isNeedResetTimer) {
       _state!.onResetTimer();
     }
