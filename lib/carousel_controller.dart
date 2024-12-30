@@ -38,8 +38,11 @@ class CarouselSliderControllerImpl implements CarouselSliderController {
     }
   }
 
-  void _setModeController() =>
+  void _setModeController() {
+    if (_state != null) {
       _state!.changeMode(CarouselPageChangedReason.controller);
+    }
+  }
 
   @override
   bool get ready => _state != null;
@@ -55,12 +58,14 @@ class CarouselSliderControllerImpl implements CarouselSliderController {
       {Duration? duration = const Duration(milliseconds: 300),
       Curve? curve = Curves.linear}) async {
     final bool isNeedResetTimer = _state != null && _state!.options != null && _state!.options.pauseAutoPlayOnManualNavigate;
-    if (isNeedResetTimer) {
+    if (isNeedResetTimer && _state != null) {
       _state!.onResetTimer();
     }
     _setModeController();
-    await _state!.pageController!.nextPage(duration: duration!, curve: curve!);
-    if (isNeedResetTimer) {
+    if (_state != null) {
+      await _state!.pageController!.nextPage(duration: duration!, curve: curve!);
+    }
+    if (_state != null && isNeedResetTimer) {
       _state!.onResumeTimer();
     }
   }
@@ -72,14 +77,16 @@ class CarouselSliderControllerImpl implements CarouselSliderController {
   Future<void> previousPage(
       {Duration? duration = const Duration(milliseconds: 300),
       Curve? curve = Curves.linear}) async {
-    final bool isNeedResetTimer = _state!.options.pauseAutoPlayOnManualNavigate;
-    if (isNeedResetTimer) {
+    final bool isNeedResetTimer = _state != null && _state!.options != null && _state!.options.pauseAutoPlayOnManualNavigate;
+    if (_state != null && isNeedResetTimer) {
       _state!.onResetTimer();
     }
     _setModeController();
-    await _state!.pageController!
-        .previousPage(duration: duration!, curve: curve!);
-    if (isNeedResetTimer) {
+    if (_state != null) {
+      await _state!.pageController!.previousPage(duration: duration!, curve: curve!);
+    }
+    
+    if (_state != null && isNeedResetTimer) {
       _state!.onResumeTimer();
     }
   }
